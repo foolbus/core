@@ -1,0 +1,3 @@
+var callback = function callback(req, res) {
+  res.send('respond finally');
+}
