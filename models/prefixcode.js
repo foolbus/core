@@ -1,11 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const PrefixCode = sequelize.define('PrefixCode', {
+  const PrefixCodes = sequelize.define('PrefixCodes', {
     code: DataTypes.STRING,
     framework: DataTypes.STRING
   }, {});
-  PrefixCode.associate = function(models) {
+  PrefixCodes.associate = function(models) {
     // associations can be defined here
   };
-  return PrefixCode;
+  return PrefixCodes;
 };

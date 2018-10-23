@@ -1,17 +1,11 @@
 var express = require('express');
-var router = express.Router();
-var fs = require('fs');
-const path = require('path');
+        var router = express.Router();
+        var fs = require('fs');
+        const path = require('path');
+        router.get('/', function(req, res, next) {
 
 
-fs.readFile(path.join(__dirname, '..', 'sampleFile.txt'), function(err, buf) {
-  eval(buf.toString());
+  res.send('{"hello": "respond now or never"}');
 
-});
-
-
-
-
-
-
-module.exports = router;
+});module.exports = router;
+        
