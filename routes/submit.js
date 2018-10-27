@@ -27,16 +27,23 @@ router.post('/', function(req, res, next) {
   job.on('succeeded', (result) => {
     console.log(`Received result for job ${job.id}: ${result}`);
 
-    var output = request.get('http://localhost:3003/runCode', function(error, output, body) {
-        var b = JSON.parse(body);
-        console.log(b.hello);
 
-        if (strcmp(response, b.hello) == 0)
-          res.send("correct");
-        else {
-          res.send("incorrect");
-        }
-    });
+    async function op() {
+      var output = await request.get('http://localhost:3003/runCode', function(error, output, body) {
+        console.log(body);
+            var b = JSON.parse(body);
+
+
+            if (strcmp(response, b.hello) == 0)
+              res.send("correct");
+            else {
+              res.send("incorrect");
+            }
+        });
+
+    }
+
+  op();
 
   });
 
