@@ -30,15 +30,23 @@ function processExpressJob(){
 
 
     async function formResponse() {
-      var file = ""
-      var prefix = await prefixCode;
+      try{
+        var file = ""
+        var prefix = await prefixCode;
 
-      file = await file.concat(prefix.code);
-      file = await file.concat(job.data.code);
+        file = await file.concat(prefix.code);
+        file = await file.concat(job.data.code);
 
-      var suffix = await suffixCode;
-      file = await file.concat(suffix.code);
-      await fs.writeFileSync("ExpressDriver/routes/runCode.js", file);
+        var suffix = await suffixCode;
+        file = await file.concat(suffix.code);
+        console.log(job.data.code)
+
+        await fs.writeFileSync("ExpressDriver/routes/runCode.js", file)
+
+        console.log("File Written")
+      }catch(err){
+        console.log(err)
+      }
 
     }
 
@@ -48,7 +56,9 @@ function processExpressJob(){
       var port = server.address().port;
       return done(null,port);
 
-      });
+    }).catch( (err) => {
+      console.log(err);
+    })
 
 
     //return done(null,job.data.framework);

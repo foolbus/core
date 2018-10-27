@@ -15,6 +15,7 @@ function strcmp(str1, str2) {
 
 router.post('/', function(req, res, next) {
   const code = req.body.code;
+  console.log(code);
   const response = "help me yo!"
   const jobData = {
     "framework":"Express",
