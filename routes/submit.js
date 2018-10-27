@@ -26,8 +26,11 @@ router.post('/', function(req, res, next) {
   job.save();
   job.on('succeeded', (result) => {
     console.log(`Received result for job ${job.id}: ${result}`);
+    return res.send("success")
   });
-  
+
+
+
 
 
 
