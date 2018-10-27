@@ -6,6 +6,7 @@ var request = require('request');
 var socket = require('socket.io-client')('http://localhost:3004');
 var models = require('../models');
 var async = require('async');
+const queue = require('../store/queue');
 
 function strcmp(str1, str2) {
 
@@ -13,52 +14,20 @@ function strcmp(str1, str2) {
 }
 
 router.post('/', function(req, res, next) {
-  var response = "respond now or never";
-  socket.emit('chat message');
-  socket.on('started', function() {
-    const prefixCode =
-      models.PrefixCodes.find({
-        where: {
-          framework: 'Express'
-        }
-      })
+  const code = req.body.code;
 
+  const jobData = {
+    "framework":"Express",
+    "code": code,
+  };
 
-    const suffixCode =
-      models.SuffixCodes.find({
-        where: {
-          framework: 'Express'
-        }
-      })
+  const job = queue.createJob(jobData);
 
-
-    async function formResponse() {
-      var file = ""
-      var prefix = await prefixCode;
-
-      file = await file.concat(prefix.code);
-      file = await file.concat(req.body.code);
-
-      var suffix = await suffixCode;
-      file = await file.concat(suffix.code);
-      await fs.writeFileSync("ExpressDriver/routes/runCode.js", file);
-
-      var output = await request.get('http://localhost:3003/runCode', function(error, output, body) {
-        var b = JSON.parse(body);
-        console.log(b.hello);
-
-        if (strcmp(response, b.hello) == 0)
-          res.send("correct");
-        else {
-          res.send("incorrect");
-        }
-      });
-
-
-    }
-    formResponse();
-
+  job.save();
+  job.on('succeeded', (result) => {
+    console.log(`Received result for job ${job.id}: ${result}`);
   });
+  
 
 
 
