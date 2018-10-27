@@ -15,7 +15,7 @@ function strcmp(str1, str2) {
 
 router.post('/', function(req, res, next) {
   const code = req.body.code;
-
+  const response = "help me yo!"
   const jobData = {
     "framework":"Express",
     "code": code,
@@ -26,7 +26,18 @@ router.post('/', function(req, res, next) {
   job.save();
   job.on('succeeded', (result) => {
     console.log(`Received result for job ${job.id}: ${result}`);
-    return res.send("success")
+
+    var output = request.get('http://localhost:3003/runCode', function(error, output, body) {
+        var b = JSON.parse(body);
+        console.log(b.hello);
+
+        if (strcmp(response, b.hello) == 0)
+          res.send("correct");
+        else {
+          res.send("incorrect");
+        }
+    });
+
   });
 
 
