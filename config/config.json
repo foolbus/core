@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "unknown",
+    "password": "delta2345",
     "database": "foolbus_data",
-    "host": "Replace",
+    "host": "104.154.87.26",
     "dialect": "mysql"
   },
   "test": {
