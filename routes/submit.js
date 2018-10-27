@@ -24,12 +24,14 @@ router.post('/', function(req, res, next) {
   const job = queue.createJob(jobData);
 
   job.save();
+  var port;
   job.on('succeeded', (result) => {
+    port = result; //Change this to get port
     console.log(`Received result for job ${job.id}: ${result}`);
 
 
     async function op() {
-      var output = await request.get('http://localhost:3003/runCode', function(error, output, body) {
+      var output = await request.get(`http://localhost:${port}/runCode`, function(error, output, body) {
         console.log(body);
             var b = JSON.parse(body);
 

@@ -43,7 +43,10 @@ function processExpressJob(){
     }
 
     formResponse().then( () => {
-        return done(null,"Success");
+      var app = require('../ExpressDriver/app');
+      const server = app.listen(0);
+      var port = server.address().port;
+      return done(null,port);
 
       });
 
@@ -51,8 +54,6 @@ function processExpressJob(){
     //return done(null,job.data.framework);
   })
 }
-
-
 
 processExpressJob();
 
