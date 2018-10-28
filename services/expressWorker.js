@@ -1,10 +1,12 @@
 console.log("expressWorker started")
 
 const queue = require('../store/queue');
+const closePortQueue = require('../store/closePortQueue');
 const redis = require('../store/redis');
 const models = require('../models');
 const async = require('async');
 const fs = require('fs');
+const kill = require('kill-port')
 
 
 function processExpressJob(){
@@ -39,7 +41,7 @@ function processExpressJob(){
 
         var suffix = await suffixCode;
         file = await file.concat(suffix.code);
-        console.log(job.data.code)
+
 
         await fs.writeFileSync("ExpressDriver/routes/runCode.js", file)
 
@@ -54,8 +56,15 @@ function processExpressJob(){
       var app = require('../ExpressDriver/app');
       const server = app.listen(0);
       var port = server.address().port;
-      return done(null,port);
+      const jobData = {
+        "port":port
+      }
+      console.log("Creating close port job!");
+      const job = closePortQueue.createJob(jobData);
+      job.save();
 
+      return done(null,port);
+      
     }).catch( (err) => {
       console.log(err);
     })

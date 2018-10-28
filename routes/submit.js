@@ -2,11 +2,14 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 const path = require('path');
-var request = require('request');
+var request = require('request-promise');
 var socket = require('socket.io-client')('http://localhost:3004');
 var models = require('../models');
 var async = require('async');
 const queue = require('../store/queue');
+const closePortQueue = require('../store/closePortQueue');
+const kill = require('kill-port')
+
 
 function strcmp(str1, str2) {
 
@@ -15,7 +18,6 @@ function strcmp(str1, str2) {
 
 router.post('/', function(req, res, next) {
   const code = req.body.code;
-  console.log(code);
   const response = "help me yo!"
   const jobData = {
     "framework":"Express",
@@ -32,18 +34,23 @@ router.post('/', function(req, res, next) {
 
 
     async function op() {
-      var output = await request.get(`http://localhost:${port}/runCode`, function(error, output, body) {
+
+      var output = await request.get(`http://localhost:${port}/runCode`).then( (body) => {
         console.log(body);
-            var b = JSON.parse(body);
+        var b = JSON.parse(body);
 
+        if (strcmp(response, b.hello) == 0){
+          console.log(port);
+          kill(port);
+          res.send("correct");
+        }
 
-            if (strcmp(response, b.hello) == 0)
-              res.send("correct");
-            else {
-              res.send("incorrect");
-            }
-        });
+        else {
+          kill(port);
+          res.send("incorrect");
+        }
 
+      })
     }
 
   op();
