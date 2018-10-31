@@ -11,7 +11,6 @@ var app = express();
 
 
 var http = require('http').Server(app);
-var io = require('socket.io')(app.listen(3004));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,14 +22,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
-    io.emit('started',{will:' started'})
-
-  });
-
-});
 
 
 app.use('/', indexRouter);

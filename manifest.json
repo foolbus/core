@@ -1,0 +1,13 @@
+{
+  "apps":[
+    {
+      "script":"services/expressWorker.js",
+      "ignore_watch":[".git","node_modules"],
+      "group":"backend"
+    },
+    {
+      "script":"bin/www",
+      "group":"backend"
+    }
+  ]
+}

@@ -2,10 +2,14 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 const path = require('path');
-var request = require('request');
+var request = require('request-promise');
 var socket = require('socket.io-client')('http://localhost:3004');
 var models = require('../models');
 var async = require('async');
+const queue = require('../store/queue');
+const closePortQueue = require('../store/closePortQueue');
+const kill = require('kill-port')
+
 
 function strcmp(str1, str2) {
 
@@ -13,52 +17,47 @@ function strcmp(str1, str2) {
 }
 
 router.post('/', function(req, res, next) {
-  var response = "respond now or never";
-  socket.emit('chat message');
-  socket.on('started', function() {
-    const prefixCode =
-      models.PrefixCodes.find({
-        where: {
-          framework: 'Express'
-        }
-      })
+  const code = req.body.code;
+  const response = "help me yo!"
+  const jobData = {
+    "framework":"Express",
+    "code": code,
+  };
+
+  const job = queue.createJob(jobData);
+
+  job.save();
+  var port;
+  job.on('succeeded', (result) => {
+    port = result; //Change this to get port
+    console.log(`Received result for job ${job.id}: ${result}`);
 
 
-    const suffixCode =
-      models.SuffixCodes.find({
-        where: {
-          framework: 'Express'
-        }
-      })
+    async function op() {
 
-
-    async function formResponse() {
-      var file = ""
-      var prefix = await prefixCode;
-
-      file = await file.concat(prefix.code);
-      file = await file.concat(req.body.code);
-
-      var suffix = await suffixCode;
-      file = await file.concat(suffix.code);
-      await fs.writeFileSync("ExpressDriver/routes/runCode.js", file);
-
-      var output = await request.get('http://localhost:3003/runCode', function(error, output, body) {
+      var output = await request.get(`http://localhost:${port}/runCode`).then( (body) => {
+        console.log(body);
         var b = JSON.parse(body);
-        console.log(b.hello);
 
-        if (strcmp(response, b.hello) == 0)
+        if (strcmp(response, b.hello) == 0){
+          kill(port);
           res.send("correct");
+        }
+
         else {
+          kill(port);
           res.send("incorrect");
         }
-      });
 
-
+      })
     }
-    formResponse();
+
+  op();
 
   });
+
+
+
 
 
 
