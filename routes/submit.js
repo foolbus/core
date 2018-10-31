@@ -40,7 +40,6 @@ router.post('/', function(req, res, next) {
         var b = JSON.parse(body);
 
         if (strcmp(response, b.hello) == 0){
-          console.log(port);
           kill(port);
           res.send("correct");
         }

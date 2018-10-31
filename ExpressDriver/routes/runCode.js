@@ -5,7 +5,7 @@ var express = require('express');
         router.get('/', function(req, res, next) {
 
 
-  res.send('{"hello": "help me y0000o!"}');
+  res.send('{"hello": "help me yo4rfff!"}');
 
 });module.exports = router;
         

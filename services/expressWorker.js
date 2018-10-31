@@ -64,7 +64,7 @@ function processExpressJob(){
       job.save();
 
       return done(null,port);
-      
+
     }).catch( (err) => {
       console.log(err);
     })
@@ -75,9 +75,3 @@ function processExpressJob(){
 }
 
 processExpressJob();
-
-process.on('SIGINT', function() {
-   db.stop(function(err) {
-     process.exit(err ? 1 : 0);
-   });
-});
