@@ -47,8 +47,6 @@ passport.deserializeUser(function(id, done) {
 
 });
 
-
-
 passport.use(new GoogleStrategy({
     clientID: '932013263345-vtif5ud94fdrf41ert6rr66thpt78t0q.apps.googleusercontent.com',
     clientSecret: 'GZUjAXTMUovMWSw9oXjTh-WS',

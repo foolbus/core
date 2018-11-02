@@ -1,0 +1,47 @@
+{
+	"info": {
+		"_postman_id": "b085feab-c8e3-4127-8bf3-2073c5d6aa5c",
+		"name": "testingFoolbus",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Data test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "68738833-cfa7-46ae-97df-52b0de95217a",
+						"exec": [
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.hello).to.eql(\"help me yo!\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/runCode",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"runCode"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

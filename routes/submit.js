@@ -7,7 +7,6 @@ var socket = require('socket.io-client')('http://localhost:3004');
 var models = require('../models');
 var async = require('async');
 const queue = require('../store/queue');
-const closePortQueue = require('../store/closePortQueue');
 const kill = require('kill-port')
 
 
@@ -29,31 +28,17 @@ router.post('/', function(req, res, next) {
   job.save();
   var port;
   job.on('succeeded', (result) => {
-    port = result; //Change this to get port
-    console.log(`Received result for job ${job.id}: ${result}`);
+    port = result.port; //Change this to get port
+    console.log(`Received result for job ${job.id}: ${result.port}`);
 
+    if(result.assertion.failed == 0){
+      kill(port);
+      res.send('correct');
 
-    async function op() {
-
-      var output = await request.get(`http://localhost:${port}/runCode`).then( (body) => {
-        console.log(body);
-        var b = JSON.parse(body);
-
-        if (strcmp(response, b.hello) == 0){
-          kill(port);
-          res.send("correct");
-        }
-
-        else {
-          kill(port);
-          res.send("incorrect");
-        }
-
-      })
+    }else{
+      //kill(port);
+      res.send("incorrect");
     }
-
-  op();
-
   });
 
 

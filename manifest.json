@@ -8,6 +8,10 @@
     {
       "script":"bin/www",
       "group":"backend"
+    },
+    {
+      "script": "services/testingWorker.js",
+      "group" : "backend"
     }
   ]
 }

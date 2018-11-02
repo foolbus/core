@@ -1,7 +1,7 @@
 console.log("expressWorker started")
 
 const queue = require('../store/queue');
-const closePortQueue = require('../store/closePortQueue');
+const testingQueue = require('../store/testingQueue');
 const redis = require('../store/redis');
 const models = require('../models');
 const async = require('async');
@@ -57,13 +57,22 @@ function processExpressJob(){
       const server = app.listen(0);
       var port = server.address().port;
       const jobData = {
-        "port":port
+        "port":port,
+        "collection_url" : "collections/testingFoolbus.postman_collection.json"
       }
-      console.log("Creating close port job!");
-      const job = closePortQueue.createJob(jobData);
+      console.log("Creating testing job!");
+      const job = testingQueue.createJob(jobData);
       job.save();
 
-      return done(null,port);
+      job.on('succeeded', (result) => {
+        console.log("Succeeded testing phase");
+        var retData = {
+          "port": port,
+          "assertion": result
+        }
+        return done(null,retData);
+      });
+
 
     }).catch( (err) => {
       console.log(err);
