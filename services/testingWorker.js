@@ -14,11 +14,10 @@ function processTestingJob() {
   queue.process((job, done) => {
       const collection = job.data.collection_url;
       const port = job.data.port;
-      console.log(port);
-      console.log(collection)
+
 
       newman.run({
-        collection: require('../collections/testingFoolbus.postman_collection.json'),
+        collection: require('../collections/Question1.postman_collection.json'),
         environment: {
           	"id": "0f45bf17-42d9-48b7-8923-feda27a485b2",
           	"name": "foolBus testing",
@@ -38,16 +37,14 @@ function processTestingJob() {
       }).on('start', function(err, args) {
         console.log("running a collection");
       }).on('request',function(err,response){
-        console.log(response.response);
-        console.log(response.request);
       }).on('assertion',function(err, summ){
         console.log(summ);
       }).on('done', function(err, summary) {
-        console.log(summary.run.stats)
         if (err || summary.error) {
           console.error('collection run encountered an error.');
         } else {
-          console.log(summary.run.stats.assertions)
+          const fn = job.data.close
+          console.log(fn)
           return done(null, summary.run.stats.assertions);
         }
       })

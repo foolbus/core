@@ -7,6 +7,7 @@ const models = require('../models');
 const async = require('async');
 const fs = require('fs');
 const kill = require('kill-port')
+const GracefulShutdownManager = require('@moebius/http-graceful-shutdown').GracefulShutdownManager;
 
 
 function processExpressJob(){
@@ -58,18 +59,29 @@ function processExpressJob(){
       var port = server.address().port;
       const jobData = {
         "port":port,
+        "close" : server.close,
         "collection_url" : "collections/testingFoolbus.postman_collection.json"
       }
+      console.log(server.close)
       console.log("Creating testing job!");
       const job = testingQueue.createJob(jobData);
       job.save();
 
+
+
       job.on('succeeded', (result) => {
+        const shutdownManager = new GracefulShutdownManager(server);
+
         console.log("Succeeded testing phase");
+        
         var retData = {
+
           "port": port,
+
           "assertion": result
         }
+
+
         return done(null,retData);
       });
 

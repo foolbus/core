@@ -29,14 +29,16 @@ router.post('/', function(req, res, next) {
   var port;
   job.on('succeeded', (result) => {
     port = result.port; //Change this to get port
+    server = result.server;
     console.log(`Received result for job ${job.id}: ${result.port}`);
 
     if(result.assertion.failed == 0){
-      kill(port);
+      //server.close();
       res.send('correct');
 
     }else{
       //kill(port);
+      //server.close();
       res.send("incorrect");
     }
   });

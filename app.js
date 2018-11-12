@@ -30,18 +30,19 @@ const sessOptions = {
 
 
 var app = express();
-
+app.set('view engine', 'html');
 
 
 passport.serializeUser(function(user, done) {
-  console.log(user);
   done(null, user.dataValues.id);
 });
 
 passport.deserializeUser(function(id, done) {
-
-  models.User.findOne({id: id}).then( (user) => {
-    console.log(user);
+  models.User.findOne({
+    where:{
+      id: id
+    }
+  }).then( (user) => {
     done(null,user);
   })
 
@@ -100,8 +101,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', indexRouter);
-app.use('/users', ensureAuthenticated,usersRouter);
-app.use('/submit', submitRouter);
+app.use('/users', ensureAuthenticated, usersRouter);
+app.use('/submit', ensureAuthenticated, submitRouter);
 app.use('/fakeServer', fakeServer);
 
 

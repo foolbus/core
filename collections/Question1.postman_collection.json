@@ -1,0 +1,49 @@
+{
+	"info": {
+		"_postman_id": "4d59eeab-3965-4919-9969-dbc6a6ceeef0",
+		"name": "Question1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "564e698d-ba52-4b26-8a66-caf79edfc66a",
+						"exec": [
+							"pm.test(\"getTest\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData[0].id).to.eql(1);",
+							"    pm.expect(jsonData[0].name).to.eql(\"senthil\");",
+							"    pm.expect(jsonData[0].balance).to.eql(100);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:{{port}}/runCode",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"runCode"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
