@@ -6,6 +6,44 @@
 	},
 	"item": [
 		{
+			"name": "post_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0eee0989-df04-41b6-acfb-8e249b6070df",
+						"exec": [
+							"postman.setNextRequest(\"get_request\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "localhost:{{port}}/runCode",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"runCode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get_request",
 			"event": [
 				{
@@ -17,9 +55,10 @@
 							"    var jsonData = pm.response.json();",
 							"    ",
 							"    pm.expect(jsonData[0].id).to.eql(1);",
-							"    pm.expect(jsonData[0].name).to.eql(\"senthil\");",
-							"    pm.expect(jsonData[0].balance).to.eql(100);",
-							"});"
+							"    pm.expect(jsonData[0].name).to.eql(\"karthic\");",
+							"    pm.expect(jsonData[0].balance).to.eql(120);",
+							"});",
+							"postman.setNextRequest(null)"
 						],
 						"type": "text/javascript"
 					}

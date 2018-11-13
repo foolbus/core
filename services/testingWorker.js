@@ -12,6 +12,7 @@ const newman = require('newman');
 
 function processTestingJob() {
   queue.process((job, done) => {
+
       const collection = job.data.collection_url;
       const port = job.data.port;
 

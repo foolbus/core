@@ -73,7 +73,7 @@ function processExpressJob(){
         const shutdownManager = new GracefulShutdownManager(server);
 
         console.log("Succeeded testing phase");
-        
+
         var retData = {
 
           "port": port,
